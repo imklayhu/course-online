@@ -1,7 +1,7 @@
 {
-  "name": "unisol-community",
+  "name": "course-online",
   "version": "1.0.0",
-  "description": "unisol platform sns community front end project code",
+  "description": "我的毕业设计项目，在线课程交互系统",
   "author": "clamber <hellodearclam@outlook.com>",
   "private": true,
   "scripts": {
@@ -11,16 +11,26 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "babel-plugin-import": "^1.7.0",
     "browser-sync": "^2.23.6",
+    "element-ui": "^2.3.4",
     "gulp": "^3.9.1",
     "gulp-nodemon": "^2.2.1",
+    "iview": "^2.13.1",
     "json-server": "^0.12.1",
+    "jsonwebtoken": "^8.2.1",
     "koa": "^2.5.0",
+    "koa-bodyparser": "^4.2.0",
     "koa-cors": "^0.0.16",
+    "koa-multer": "^1.0.2",
     "koa-router": "^7.4.0",
+    "koa-static": "^4.0.2",
     "mockjs": "^1.0.1-beta3",
+    "moment": "^2.22.1",
+    "mongoose": "^5.0.15",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
