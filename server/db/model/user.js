@@ -1,5 +1,5 @@
 // const mongoose = require('mongoose');
-const mongoose = require('../config');
+const mongoose = require('./../config');
 const Schema = mongoose.Schema;
 const userSchema = new Schema({
   username: { //用户名，自定义的，不可重复
@@ -12,8 +12,9 @@ const userSchema = new Schema({
     type: String,
     required: true 
   },
+  school: String, //学校
   team: String, // 班级
-  collega: String, // 学院
+  college: String, // 学院
   profession: String,  //专业
   createDate: String,  // 注册时间
   token: String, //用户的登录的令牌
@@ -24,7 +25,7 @@ const userSchema = new Schema({
   }, // 用户头像地址
   signature: {
     type: String,
-    default: "这家伙很懒，什么都没有"
+    // default: "这家伙很懒，什么都没有"
   }, // 用户个性签名
   logined: false, //是否登录
 });

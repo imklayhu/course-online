@@ -1,12 +1,19 @@
+import {
+  WSAEINVALIDPROCTABLE
+} from "constants";
+
 const user = {
   state: {
     name: window.localStorage.getItem('name') || '',
     username: window.localStorage.getItem('username') || '',
     password: window.localStorage.getItem('password') || '',
     id: window.localStorage.getItem('id') || '',
-    college: '',
-    team: '',
-    profession: '',
+    school: window.localStorage.getItem('school') || '',
+    college: window.localStorage.getItem('college') || '',
+    team: window.localStorage.getItem('team') || '',
+    profession: window.localStorage.getItem('profession') || '',
+    signature: window.localStorage.getItem('signature') || '',
+    type: window.localStorage.getItem('type') || '',
     avatar: "https://i2.hdslb.com/bfs/face/0088e22e3768fc3cbd4bb18fd2d742148735ab49.jpg@72w_72h.webp",
   },
   mutations: {
@@ -23,29 +30,90 @@ const user = {
       state.id = userData.id;
       window.localStorage.setItem('id', userData.id);
 
+      state.signature = userData.signature;
+      window.localStorage.setItem('signature', userData.signature);
+
+      state.school = userData.school;
+      window.localStorage.setItem('school', userData.school);
+
       state.college = userData.college;
+      window.localStorage.setItem('college', userData.college);
+
       state.team = userData.team;
+      window.localStorage.setItem('team', userData.team);
+
       state.profession = userData.profession;
+      window.localStorage.setItem('profession', userData.profession);
+
+      state.type = userData.type;
+      window.localStorage.setItem('type', userData.type);
+
       state.avatar = userData.avatar;
     },
     SET_USERLOGOUT: (state) => {
       state.username = null;
       window.localStorage.removeItem('username');
+
       state.name = null;
       window.localStorage.removeItem('name');
+
       state.id = null;
       window.localStorage.removeItem('id');
+
       state.password = null;
       window.localStorage.removeItem('password');
 
+      state.signature = null;
+      window.localStorage.removeItem('signature');
+
+      state.school = null;
+      window.localStorage.removeItem('school');
+
       state.college = null;
+      window.localStorage.removeItem('college');
+
       state.team = null;
+      window.localStorage.removeItem('team');
+
       state.profession = null;
+      window.localStorage.removeItem('profession');
+
+      state.type = null;
+      window.localStorage.removeItem('type');
+
       state.avatar = null;
     },
-    RESET_PASSWORD: (state,newPassword)=>{
+    RESET_PASSWORD: (state, newPassword) => {
       state.password = newPassword;
-      window.localStorage.setItem('password',newPassword);
+      window.localStorage.setItem('password', newPassword);
+    },
+    SET_SIGNATURE: (state, newSignature) => {
+      state.signature = newSignature;
+      window.localStorage.setItem('signature', newSignature);
+    },
+    SET_USERNAME: (state, newUsername) => {
+      state.username = newUsername;
+      window.localStorage.setItem('username', newUsername);
+    },
+    SET_NAME: (state, newName) => {
+      state.name = newName;
+      window.localStorage.setItem('name', newName);
+    },
+    SET_SCHOOL: (state, newSchool) => {
+      state.school = newSchool;
+      window.localStorage.setItem('school', newSchool);
+    },
+    SET_COLLEGE: (state, newCollege) => {
+      state.college = college;
+      window.localStorage.setItem('college', college);
+    },
+    SET_PROFESSION: (state, newProfession) => {
+      state.profession = newProfession;
+      window.localStorage.setItem('profession', newProfession);
+    },
+    SET_TEAM: (state,newTeam) => {
+      state.team = newteam;
+      window.localStorage.setItem('team',newTeam);
     }
   },
   actions: {
@@ -54,12 +122,53 @@ const user = {
     }, userData) {
       commit('SET_USERDATA', userData);
     },
-    Logout({ commit }){
-      commit('SET_USERLOGOUT')
+    Logout({
+      commit
+    }) {
+      commit('SET_USERLOGOUT');
     },
-    ResetPassword({commit,newPassword}){
-      commit('RESET_PASSWORD',newPassword);
-    }
+    ResetPassword({
+        commit,
+      },
+      newPassword) {
+      commit('RESET_PASSWORD', newPassword);
+    },
+    GetSignature({
+        commit
+      },
+      newSignature) {
+      commit('SET_SIGNATURE', newSignature);
+    },
+    ResetUsername({
+      commit
+    }, newUsername) {
+      commit('SET_USERNAME', newUsername);
+    },
+    ResetName({
+      commit
+    }, newName) {
+      commit('SET_NAME', newName);
+    },
+    ResetSchool({
+      commit
+    }, newSchool) {
+      commit('SET_SCHOOL',newSchool);
+    },
+    ResetCollege({
+      commit
+    }, newCollege) {
+      commit('SET_COLLEGE',newCollege);
+    },
+    ResetProfession({
+      commit
+    }, newProfession) {
+      commit('SET_PROFESSION',newProfession);
+    },
+    ResetTEAM({
+      commit
+    }, newTeam) {
+      commit('SET_TEAM',newTeam);
+    },
   }
 }
 
