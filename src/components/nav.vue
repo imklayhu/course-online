@@ -9,7 +9,7 @@
         <router-link to="/course">课程中心</router-link>
       </li>
       <li @click="active(1)" v-if="username" :class="isActive.index2? 'is-active': ''">
-        <router-link to="/bbs">学习社区</router-link>
+        <router-link to="/community">学习社区</router-link>
       </li>
       <li v-if="username">
         <el-tooltip class="item" effect="dark" :content="username" placement="bottom">
@@ -37,15 +37,14 @@ export default {
         index4: false,
         index5: false
       },
-      avatar:
-        "https://i2.hdslb.com/bfs/face/0088e22e3768fc3cbd4bb18fd2d742148735ab49.jpg@72w_72h.webp"
     };
   },
   computed: {
     ...mapState({
       username: state => state.user.username,
       name: state => state.user.name,
-      id: state => state.user.id
+      id: state => state.user.id,
+      avatar: state => state.user.avatar
     }),
   },
   mounted() {
@@ -152,7 +151,7 @@ export default {
   text-decoration: none;
 }
 .is-active {
-  border-bottom: 2px solid #409eff;
+  border-bottom: 2px solid #009a61;
   /* color: #009a61; */
 }
 </style>

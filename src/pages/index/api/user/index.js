@@ -26,7 +26,7 @@ export function setUsername(obj) {
 }
 
 // 修改用户姓名
-export function setName(obj){
+export function setName(obj) {
   return fetch({
     url: "/api/setName",
     method: 'post',
@@ -35,7 +35,7 @@ export function setName(obj){
 }
 
 // 修改用户学校信息
-export function setSchool(obj){
+export function setSchool(obj) {
   return fetch({
     url: '/api/setSchool',
     method: 'post',
@@ -44,7 +44,7 @@ export function setSchool(obj){
 }
 
 //修改用户学院信息
-export function setCollege(obj){
+export function setCollege(obj) {
   return fetch({
     url: '/api/setCollege',
     method: 'post',
@@ -52,7 +52,7 @@ export function setCollege(obj){
   })
 }
 // 修改用户专业信息
-export function setProfession(obj){
+export function setProfession(obj) {
   return fetch({
     url: '/api/setProfession',
     method: 'post',
@@ -61,10 +61,19 @@ export function setProfession(obj){
 }
 
 // 修改用户班级信息
-export function setTeam(obj){
+export function setTeam(obj) {
   return fetch({
     url: '/api/setTeam',
     method: 'post',
+    data: obj
+  })
+}
+
+// 获取所有的用户信息
+export function getUsersInfo(obj) {
+  return fetch({
+    url: "/api/getUsers",
+    method: "post",
     data: obj
   })
 }

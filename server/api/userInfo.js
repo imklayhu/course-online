@@ -29,6 +29,17 @@ const findUserByUsername = (username) => {
     })
   })
 }
+// 根据前端发送的关键字查找 学生用户 信息
+const studentInfo = (filter) => {
+  return new Promise((reslove,reject)=>{
+    userModel.find(filter,(err,docs)=>{
+      if(err){
+        reject(err);
+      }
+      reslove(docs);
+    })
+  })
+}
 
 // update user's some key word value
 const updateUser = (filter, updateData) => {
@@ -265,7 +276,7 @@ module.exports = {
       'id': query.id,
     };
     const newSchool = {
-      'name': query.school,
+      'school': query.school,
     };
     let doc = await updateUser(filter, newSchool);
     if (doc) {
@@ -356,15 +367,36 @@ module.exports = {
       console.log(`用户${query.id}:team修改失败，不存在该用户`);
     }
   },
-  // 修改用户的id 信息
-  // async setId(ctx) {
-  //   const query = ctx.request.body;
+  // 修改用户的头像 信息
+  async setAvatar(ctx) {
+    const query = ctx.request.body;
+    const filter = {
+      'id': query.id,
+    };
+    const newAvatar = {
+      'avatar': query.avatar,
+    };
+  },
 
-  //   const filter = {
-  //     'id': query.id,
-  //   };
-  //   const newId = {
-  //     'id': query.newId
-  //   }
-  // }
+  // 根据关键字获取用户信息，关键字包括，学号、姓名、用户名
+  async getUsers(ctx) {
+    await cors();
+    const filter = ctx.request.body;
+    // console.log(filter);
+    filter.type = 1;
+    let docs = await studentInfo(filter);
+    if(docs){
+      ctx.body = {
+        success: 1,
+        res: docs
+      };
+      console.log("学生信息查询成功");
+    }else{
+      ctx.body = {
+        success: 0,
+        res: 0
+      };
+      console.log("学生信息查询失败")
+    }
+  }
 }

@@ -28,6 +28,7 @@ const userSchema = new Schema({
     // default: "这家伙很懒，什么都没有"
   }, // 用户个性签名
   logined: false, //是否登录
+  isCaptain: false
 });
 
 module.exports = mongoose.model('user',userSchema);

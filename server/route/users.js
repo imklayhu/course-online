@@ -12,4 +12,6 @@ const routers = router
   .post('/setCollege',userInfoApi.setCollege)
   .post('/setProfession',userInfoApi.setProfession)
   .post('/setTeam',userInfoApi.setTeam)
+  .post('/setAvatar',userInfoApi.setAvatar)
+  .post('/getUsers',userInfoApi.getUsers)
 module.exports = routers;

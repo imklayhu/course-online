@@ -1,7 +1,3 @@
-import {
-  WSAEINVALIDPROCTABLE
-} from "constants";
-
 const user = {
   state: {
     name: window.localStorage.getItem('name') || '',
@@ -14,7 +10,7 @@ const user = {
     profession: window.localStorage.getItem('profession') || '',
     signature: window.localStorage.getItem('signature') || '',
     type: window.localStorage.getItem('type') || '',
-    avatar: "https://i2.hdslb.com/bfs/face/0088e22e3768fc3cbd4bb18fd2d742148735ab49.jpg@72w_72h.webp",
+    avatar: window.localStorage.getItem('avatar') || 'https://pic3.zhimg.com/v2-e1ad4b097cf8139ea1f754c8fbb2df90_im.jpg',
   },
   mutations: {
     SET_USERDATA: (state, userData) => {
@@ -49,6 +45,7 @@ const user = {
       window.localStorage.setItem('type', userData.type);
 
       state.avatar = userData.avatar;
+      window.localStorage.setItem('avatar',userData.avatar);
     },
     SET_USERLOGOUT: (state) => {
       state.username = null;
@@ -82,6 +79,7 @@ const user = {
       window.localStorage.removeItem('type');
 
       state.avatar = null;
+      window.localStorage.setItem('avatar',"https://pic3.zhimg.com/v2-e1ad4b097cf8139ea1f754c8fbb2df90_im.jpg");
     },
     RESET_PASSWORD: (state, newPassword) => {
       state.password = newPassword;
@@ -104,15 +102,15 @@ const user = {
       window.localStorage.setItem('school', newSchool);
     },
     SET_COLLEGE: (state, newCollege) => {
-      state.college = college;
-      window.localStorage.setItem('college', college);
+      state.college = newCollege;
+      window.localStorage.setItem('college', newCollege);
     },
     SET_PROFESSION: (state, newProfession) => {
       state.profession = newProfession;
       window.localStorage.setItem('profession', newProfession);
     },
     SET_TEAM: (state,newTeam) => {
-      state.team = newteam;
+      state.team = newTeam;
       window.localStorage.setItem('team',newTeam);
     }
   },
@@ -164,7 +162,7 @@ const user = {
     }, newProfession) {
       commit('SET_PROFESSION',newProfession);
     },
-    ResetTEAM({
+    ResetTeam({
       commit
     }, newTeam) {
       commit('SET_TEAM',newTeam);

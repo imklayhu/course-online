@@ -7,7 +7,7 @@
           <el-col :xs="8" :sm="8" :md="8">
             <div>
               <div class="profile__heading--avatar-warp">
-                <a><img class="profile__heading--avatar" src="https://i2.hdslb.com/bfs/face/0088e22e3768fc3cbd4bb18fd2d742148735ab49.jpg@72w_72h.webp" alt=""></a>
+                <a><img class="profile__heading--avatar" :src="avatar" alt=""></a>
                 <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="3">
                   <el-button size="mini" type="primary">修改头像</el-button>
                   <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -83,7 +83,8 @@
                   <el-col :md="6">学校</el-col>
                   <el-col :md="12">
                     <span v-if="!editStatus.school">{{ school || '无'}}</span>
-                    <el-input @focus="stopWarn('school')" v-model="editFromData.school" v-if="editStatus.school" placeholder="请输入学校"></el-input>
+                    <el-input @focus="stopWarn('school')" v-model="editFromData.school" v-if="editStatus.school" :class="[warnStatus.school ? 'warn-input':'']" placeholder="请输入学校"></el-input>
+                    <span :class="[warnStatus.school ? 'tips' : '']" v-if="warnStatus.school">{{warnMessage.school}}</span>
                   </el-col>
                   <el-col :md="6">
                     <el-button @click="cancel('school')" v-if="editStatus.school" style="float: right; padding: 8px 0" icon="el-icon-close" type="text">{{'取消'}}</el-button>
@@ -95,7 +96,8 @@
                   <el-col :md="6">学院</el-col>
                   <el-col :md="12">
                     <span v-if="!editStatus.college">{{ college || '无'}}</span>
-                    <el-input @focus="stopWarn('college')" v-model="editFromData.college" v-if="editStatus.college" placeholder="请输入新的学院"></el-input>
+                    <el-input @focus="stopWarn('college')" v-model="editFromData.college" v-if="editStatus.college" :class="[warnStatus.college ? 'warn-input':'']" placeholder="请输入新的学院"></el-input>
+                    <span :class="[warnStatus.college ? 'tips' : '']" v-if="warnStatus.college">{{warnMessage.college}}</span>
                   </el-col>
                   <el-col :md="6">
                     <el-button @click="cancel('college')" v-if="editStatus.college" style="float: right; padding: 8px 0" icon="el-icon-close" type="text">{{'取消'}}</el-button>
@@ -107,7 +109,8 @@
                   <el-col :md="6">专业</el-col>
                   <el-col :md="12">
                     <span v-if="!editStatus.profession">{{ profession || '无'}}</span>
-                    <el-input @focus="stopWarn('profession')" v-if="editStatus.profession" v-model="editFromData.profession" placeholder="请输入新的专业名称"></el-input>
+                    <el-input @focus="stopWarn('profession')" v-if="editStatus.profession" v-model="editFromData.profession" :class="[warnStatus.profession ? 'warn-input':'']" placeholder="请输入新的专业名称"></el-input>
+                    <span :class="[warnStatus.profession ? 'tips' : '']" v-if="warnStatus.profession">{{warnMessage.profession}}</span>
                   </el-col>
                   <el-col :md="6">
                     <el-button @click="cancel('profession')" v-if="editStatus.profession" style="float: right; padding: 8px 0" icon="el-icon-close" type="text">{{'取消'}}</el-button>
@@ -119,7 +122,8 @@
                   <el-col :md="6">班级</el-col>
                   <el-col :md="12">
                     <span v-if="!editStatus.team">{{ team || '无'}}</span>
-                    <el-input @focus="stopWarn('team')" v-if="editStatus.team" v-model="editFromData.team" placeholder="请输入新的班级信息"></el-input>
+                    <el-input @focus="stopWarn('team')" v-if="editStatus.team" v-model="editFromData.team" :class="[warnStatus.team ? 'warn-input':'']" placeholder="请输入新的班级信息"></el-input>
+                    <span :class="[warnStatus.team ? 'tips' : '']" v-if="warnStatus.team">{{warnMessage.team}}</span>
                   </el-col>
                   <el-col :md="6">
                     <el-button @click="cancel('team')" v-if="editStatus.team" style="float: right; padding: 8px 0" icon="el-icon-close" type="text">{{'取消'}}</el-button>
@@ -252,7 +256,8 @@ export default {
       team: state => state.user.team,
       profession: state => state.user.profession,
       type: state => state.user.type,
-      signature: state => state.user.signature
+      signature: state => state.user.signature,
+      avatar: state => state.user.avatar
     })
   },
   mounted() {
@@ -266,9 +271,7 @@ export default {
           // this.editStatus.username = !this.editStatus.username;
           if (!this.editStatus.username) {
             this.editStatus.username = true;
-            console.log("开始编辑信息");
           } else {
-            console.log("保存信息");
             const obj = {
               id: this.id,
               username: this.editFromData.username
@@ -279,7 +282,6 @@ export default {
                   const data = response.data;
                   if (data.success) {
                     this.editFromData.username = "";
-                    console.log(response.data.res);
                     this.$store.dispatch("ResetUsername", data.res);
                     this.editStatus.username = false;
                     this.$notify({
@@ -305,9 +307,7 @@ export default {
         case "name":
           if (!this.editStatus.name) {
             this.editStatus.name = true;
-            console.log("开始编辑信息");
           } else {
-            console.log("保存信息");
             const obj = {
               id: this.id,
               name: this.editFromData.name
@@ -318,7 +318,6 @@ export default {
                   const data = response.data;
                   if (data.success) {
                     this.editFromData.name = "";
-                    console.log(response.data.res);
                     this.$store.dispatch("ResetName", data.res);
                     this.editStatus.name = false;
                     this.$notify({
@@ -342,16 +341,146 @@ export default {
           }
           break;
         case "school":
-          this.editStatus.school = !this.editStatus.school;
+          if (!this.editStatus.school) {
+            this.editStatus.school = true;
+          } else {
+            const obj = {
+              id: this.id,
+              school: this.editFromData.school
+            };
+            if (obj.school) {
+              setSchool(obj)
+                .then(response => {
+                  const data = response.data;
+                  if (data.success) {
+                    this.editFromData.school = "";
+                    this.$store.dispatch("ResetSchool", data.res);
+                    this.editStatus.school = false;
+                    this.$notify({
+                      title: "修改成功",
+                      message: "学校名称修改成功",
+                      type: "success"
+                    });
+                  } else {
+                    this.warnStatus.school = true;
+                    this.warnMessage.school = "修改失败";
+                  }
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+            } else {
+              this.warnStatus.school = true;
+              this.warnMessage.school = "新的学校名称不能为空";
+            }
+          }
+          // this.editStatus.school = !this.editStatus.school;
           break;
         case "college":
-          this.editStatus.college = !this.editStatus.college;
+          if (!this.editStatus.college) {
+            this.editStatus.college = true;
+          } else {
+            const obj = {
+              id: this.id,
+              college: this.editFromData.college
+            };
+            if (obj.college) {
+              setCollege(obj)
+                .then(response => {
+                  const data = response.data;
+                  if (data.success) {
+                    this.editFromData.college = "";
+                    console.log(data.res);
+                    this.$store.dispatch("ResetCollege", data.res);
+                    this.editStatus.college = false;
+                    this.$notify({
+                      title: "修改成功",
+                      message: "学院名称修改成功",
+                      type: "success"
+                    });
+                  } else {
+                    this.warnStatus.college = true;
+                    this.warnMessage.college = "修改失败";
+                  }
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+            } else {
+              this.warnStatus.college = true;
+              this.warnMessage.college = "新的学院名称不能为空";
+            }
+          }
           break;
         case "profession":
-          this.editStatus.profession = !this.editStatus.profession;
+          if (!this.editStatus.profession) {
+            this.editStatus.profession = true;
+          } else {
+            const obj = {
+              id: this.id,
+              profession: this.editFromData.profession
+            };
+            if (obj.profession) {
+              setProfession(obj)
+                .then(response => {
+                  const data = response.data;
+                  if (data.success) {
+                    this.editFromData.profession = "";
+                    this.$store.dispatch("ResetProfession", data.res);
+                    this.editStatus.profession = false;
+                    this.$notify({
+                      title: "修改成功",
+                      message: "专业名称修改成功",
+                      type: "success"
+                    });
+                  } else {
+                    this.warnStatus.profession = true;
+                    this.warnMessage.profession = "修改失败";
+                  }
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+            } else {
+              this.warnStatus.profession = true;
+              this.warnMessage.profession = "新的专业名称不能为空";
+            }
+          }
           break;
         case "team":
-          this.editStatus.team = !this.editStatus.team;
+          if (!this.editStatus.team) {
+            this.editStatus.team = true;
+          } else {
+            const obj = {
+              id: this.id,
+              team: this.editFromData.team
+            };
+            if (obj.team) {
+              setTeam(obj)
+                .then(response => {
+                  const data = response.data;
+                  if (data.success) {
+                    this.editFromData.team = "";
+                    this.$store.dispatch("ResetTeam", data.res);
+                    this.editStatus.team = false;
+                    this.$notify({
+                      title: "修改成功",
+                      message: "班级修改成功",
+                      type: "success"
+                    });
+                  } else {
+                    this.warnStatus.team = true;
+                    this.warnMessage.team = "修改失败";
+                  }
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+            } else {
+              this.warnStatus.team = true;
+              this.warnMessage.team = "新的班级不能为空";
+            }
+          }
           break;
         case "id":
           this.editStatus.id = !this.editStatus.id;
@@ -456,7 +585,7 @@ export default {
         case "confirmPwd":
           this.warnStatus.confirmPwd = false;
           break;
-        case "username": 
+        case "username":
           this.warnStatus.username = false;
           break;
         case "name":

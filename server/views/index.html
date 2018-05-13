@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src=""></script>
+</head>
+<body>
+  <div>
+    测试
+  </div>
+  <script>
+    // var btn = document.getElementsByTagName('div')[0];
+    // console.log(btn);
+    function func(){
+      console.log(this);
+      this.style.backgroundColor = 'red';
+      this.style.color = 'green'
+    }
+
+    window.onload = function(){
+      var btn = document.getElementsByTagName('div')[0];
+      btn.onclick = func;
+    }
+  </script>
+</body>
+</html>
