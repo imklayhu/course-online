@@ -16,7 +16,7 @@
         <!-- 操作 -->
         <el-button @click="customMenu('create')" class="course-active-button" style="float:right" icon="el-icon-circle-plus">创建新的任务</el-button>
         <el-button @click="customMenu('newTeam')" class="course-active-button" style="float:right" icon="el-icon-menu">创建新的班级</el-button>
-        <el-button @click="customMenu('newGroup')" class="course-active-button" style="float:right" icon="el-icon-tickets">创建新的小组</el-button>
+        <!-- <el-button @click="customMenu('newGroup')" class="course-active-button" style="float:right" icon="el-icon-tickets">创建新的小组</el-button> -->
       </el-col>
     </el-row>
   </div>

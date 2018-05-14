@@ -14,16 +14,16 @@ const getAllClasses = () => {
 }
 // 创建新的班级数据库操作
 const addClass = (classData) => {
-  let id = getAllClasses().length++;
-  let query = {
-    "_id": id,
-    "name": classData.name,
-    "captain_id": classData.captain_id,
-    "students": classData.students,
-    "teachers": classData.teachers,
-  };
+  // let id = getAllClasses().length++;
+  // let query = {
+  //   "_id": id,
+  //   "name": classData.name,
+  //   "captain_id": classData.captain_id,
+  //   "students": classData.students,
+  //   "teachers": classData.teachers,
+  // };
   return new Promise((reslove, reject) => {
-    teamModel.create(query, (err, result) => {
+    teamModel.create(classData, (err, result) => {
       if (err) {
         reject(err);
       }
@@ -49,6 +49,7 @@ module.exports = {
   async createClass(ctx) {
     await cors();
     const classData = ctx.request.body;
+    console.log(classData);
     let doc = await addClass(classData);
     if (doc) {
       console.log(doc);

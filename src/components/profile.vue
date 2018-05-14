@@ -20,7 +20,7 @@
               <h2 class="profile-username">{{username}} - {{name}}</h2>
               <p>学校：{{ school || '无'}}</p>
               <p>学院：{{ college || '无'}}</p>
-              <p>专业班级：{{`${profession}-${team}`|| '无'}}</p>
+              <p >专业班级：{{`${profession}-${team}`|| '无'}}</p>
               <p>学号：{{id || '无'}}</p>
             </div>
           </el-col>

@@ -383,20 +383,20 @@ module.exports = {
     await cors();
     const filter = ctx.request.body;
     // console.log(filter);
-    filter.type = 1;
+    // filter.type = 1;
     let docs = await studentInfo(filter);
     if(docs){
       ctx.body = {
         success: 1,
         res: docs
       };
-      console.log("学生信息查询成功");
+      console.log("用户信息查询成功");
     }else{
       ctx.body = {
         success: 0,
         res: 0
       };
-      console.log("学生信息查询失败")
+      console.log("用户信息查询失败")
     }
   }
 }
