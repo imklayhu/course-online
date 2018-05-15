@@ -59,6 +59,8 @@ export default {
           this.$router.push({
             path: "/course/processing"
           });
+
+          // this.$store.dispatch('SetTaskMode',"processing");
           this.isActive = {
             processing: true,
             checking: false,
@@ -74,6 +76,7 @@ export default {
             checking: true,
             sloved: false
           };
+          // this.$store.dispatch('SetTaskMode',"checking");
           break;
         case "sloved":
           this.$router.push({
@@ -84,6 +87,7 @@ export default {
             checking: false,
             sloved: true
           };
+          // this.$store.dispatch('SetTaskMode',"sloved");
           break;
         default:
           break;

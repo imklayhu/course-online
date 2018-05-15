@@ -14,14 +14,6 @@ const getAllClasses = () => {
 }
 // 创建新的班级数据库操作
 const addClass = (classData) => {
-  // let id = getAllClasses().length++;
-  // let query = {
-  //   "_id": id,
-  //   "name": classData.name,
-  //   "captain_id": classData.captain_id,
-  //   "students": classData.students,
-  //   "teachers": classData.teachers,
-  // };
   return new Promise((reslove, reject) => {
     teamModel.create(classData, (err, result) => {
       if (err) {
@@ -84,9 +76,21 @@ module.exports = {
   },
 
   // 获取全部班级
-  async allClasses(ctx){
+  async allClasses(ctx) {
     await cors();
-    
+
     let classes = await getAllClasses();
+    if(classes){
+      ctx.body = {
+        success: 1,
+        res: classes
+      };
+      console.log("全部班级查询成功");
+    }else{
+      ctx.body = {
+        success: 0,
+        res: 0
+      }
+    }
   }
 }

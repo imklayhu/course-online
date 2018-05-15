@@ -7,10 +7,13 @@ import profile from '@/components/profile'
 import CreateNewTask from '@/components/course/CreateNewTask'
 import CreateNewTeam from '@/components/course/CreateNewTeam'
 import CreateNewGroup from '@/components/course/CreateNewGroup'
-import TasksList from '@/components/course/TasksList'
-import ProcessingTasks from '@/components/course/Processing'
-import CheckingTasks from '@/components/course/CheckingTask'
-import SlovedTasks from '@/components/course/SlovedTask'
+
+// import TasksList from '@/components/course/TasksList'
+import TaskDetails from '@/components/course/TaskDetails.vue'
+import CheckingTasksList from '@/components/course/CheckingTasksList'
+import SlovedTasksList from '@/components/course/SlovedTasksList'
+import ProcessingTasksList from '@/components/course/ProcessingTasksList'
+
 import CourseOnline from './../../../modules/CourseOnline.vue'
 import Community from './../../../modules/Community.vue'
 import communityHome from '@/components/community/communityHome'
@@ -46,7 +49,7 @@ export default new Router({
       children: [{
           path: '',
           name: '',
-          component: TasksList
+          component: ProcessingTasksList
         },
         {
           path: 'create',
@@ -66,32 +69,35 @@ export default new Router({
         {
           path: 'processing',
           name: 'processing',
-          component: TasksList
+          component: ProcessingTasksList
         },
         {
           path: 'processing/:id',
           name: 'processDetial',
-          component: ProcessingTasks
+          component: TaskDetails,
+          props: true
         },
         {
           path: 'checking',
           name: 'checking',
-          component: TasksList
+          component: CheckingTasksList
         },
         {
           path: 'checking/:id',
           name: 'checkDetail',
-          component: CheckingTasks
+          component: TaskDetails,
+          props: true
         },
         {
           path: 'sloved',
           name: 'sloved',
-          component: TasksList
+          component: SlovedTasksList
         },
         {
           path: 'sloved/:id',
           name: 'slovedDetail',
-          component: SlovedTasks
+          component: TaskDetails,
+          props: true
         },
       ]
     },

@@ -16,7 +16,7 @@
               </span>
             </el-col>
             <el-col :span="22">
-              <span class="select-header course-topic">测试标题</span>
+              <span class="select-header course-topic">{{taskInfo.title}}</span>
             </el-col>
           </el-row>
           <el-row style="margin-top:10px;">
@@ -27,9 +27,7 @@
             </el-col>
             <el-col :span="22">
               <span class="course-desc">
-                测试标题<br> 测试标题
-                <br> 测试标题
-                <br> 测试标题 测试标题 测试标题 测试标题 测试标题
+                {{taskInfo.desc}}
               </span>
             </el-col>
           </el-row>
@@ -41,9 +39,10 @@
             </el-col>
             <el-col :span="22">
               <div style="padding:6px 0px">
-                <el-tag type="warning" size="small">作业.docx</el-tag>
+                <!-- <el-tag type="warning" size="small">作业.docx</el-tag>
                 <el-tag type="warning" size="small">作业0.docx</el-tag>
-                <el-tag type="warning" size="small">作业1.docx</el-tag>
+                <el-tag type="warning" size="small">作业1.docx</el-tag> -->
+                {{"没有附件"}}
               </div>
             </el-col>
           </el-row>
@@ -54,7 +53,7 @@
               </span>
             </el-col>
             <el-col :span="22">
-              <span class="select-header course-topic">朱萍</span>
+              <span class="select-header course-topic">{{taskInfo.teacher.name}}</span>
             </el-col>
           </el-row>
           <el-row style="margin-top: 10px">
@@ -64,10 +63,10 @@
               </span>
             </el-col>
             <el-col :span="22">
-              <span class="select-header course-topic">2018/5/1 -- 2018/5/17</span>
+              <span class="select-header course-topic">{{taskInfo.date[0].toString().slice(0,10)}} ~ {{taskInfo.date[1].toString().slice(0,10)}}</span>
             </el-col>
           </el-row>
-          <el-row style="margin-top: 10px">
+          <!-- <el-row style="margin-top: 10px" >
             <el-col :span="2">
               <span class="select-header">
                 类型:
@@ -76,7 +75,7 @@
             <el-col :span="22">
               <span class="select-header course-topic">班级作业/小组作业</span>
             </el-col>
-          </el-row>
+          </el-row> -->
         </div>
         <div class="course-menuitem" style="margin-top:10px;">
           <label class="course-group-name">编辑区</label>
@@ -118,46 +117,93 @@
   </div>
 </template>
 <script>
-export default {
-  name: "ProcessingTasks"
-};
+  import {
+    findTaskById
+  } from './../../pages/index/api/tasks/index';
+
+  export default {
+    name: "TaskDetails",
+    props: {
+      id: {
+        type: String,
+        default: 'test'
+      }
+    },
+    data() {
+      return {
+        taskInfo: {},
+      }
+    },
+    mounted() {
+      // console.log(this.id);
+      this.initData();
+    },
+    methods: {
+      initData() {
+        let obj = {
+          _id: this.id,
+        };
+
+        findTaskById(obj)
+          .then(response => {
+            console.log(response);
+            let data = response.data;
+            if(data.success){
+              this.taskInfo = data.res;
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
+    }
+  };
+
 </script>
 <style scoped>
-.text {
-  font-size: 14px;
-}
-.item {
-  margin-bottom: 18px;
-}
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
-.clearfix:after {
-  clear: both;
-}
-.course-group-name {
-  color: #cccccc;
-  display: inline;
-}
-.select-header {
-  height: 38px;
-  line-height: 38px;
-  display: inline-block;
-  padding: 0 8px;
-}
-.course-topic {
-  background-color: #f6f6f6;
-  border-radius: 4px;
-  display: block;
-}
-.course-desc {
-  min-height: 38px;
-  display: block;
-  background-color: #f6f6f6;
-  border-radius: 4px;
-  padding: 8px 6px;
-  box-sizing: content-box;
-}
+  .text {
+    font-size: 14px;
+  }
+
+  .item {
+    margin-bottom: 18px;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+
+  .clearfix:after {
+    clear: both;
+  }
+
+  .course-group-name {
+    color: #cccccc;
+    display: inline;
+  }
+
+  .select-header {
+    height: 38px;
+    line-height: 38px;
+    display: inline-block;
+    padding: 0 8px;
+  }
+
+  .course-topic {
+    background-color: #f6f6f6;
+    border-radius: 4px;
+    display: block;
+  }
+
+  .course-desc {
+    min-height: 38px;
+    display: block;
+    background-color: #f6f6f6;
+    border-radius: 4px;
+    padding: 8px 6px;
+    box-sizing: content-box;
+  }
+
 </style>

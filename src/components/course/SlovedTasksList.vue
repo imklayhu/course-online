@@ -61,10 +61,10 @@
     mapState
   } from 'vuex';
   export default {
-    name: "TasksList",
+    name: "SlovedTasksList",
     data() {
       return {
-        cardTitleList: "进行中的任务",
+        cardTitleList: "已解决的任务",
       }
     },
     mounted() {
