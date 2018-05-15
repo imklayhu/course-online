@@ -110,7 +110,7 @@ module.exports = {
     let docs = await getTasksByUserIdAndTaskStus(body.filter);
 
     if (docs) {
-      // console.log(docs);
+      console.log(docs);
       if (body.data) {
         let result = [];
 
@@ -178,6 +178,25 @@ module.exports = {
       console.log("用户回答提交成功");
     } else if (type == "check") {
       // 提交查阅结果
+      docOri.checks.push(updateData.check);
+      docOri.status = updateData.status;
+
+      let docAfter = await updateTask(filter,{
+        checks: docOri.checks,
+        status: docOri.status
+      })
+
+      if(docAfter){
+        ctx.body = {
+          success: 1,
+          res: docAfter
+        }
+      }else {
+        ctx.body = {
+          success: 0,
+          res: 0
+        }
+      }
     }
   },
   // 教师用户删除学习任务

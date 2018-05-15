@@ -3,7 +3,7 @@
   <div>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>查阅中的任务</span>
+        <span>待查阅的任务</span>
       </div>
       <div class="text item">
         <el-row>
@@ -107,11 +107,11 @@
           let obj = {
             filter: {
               teacherId: this.user.id,
-              status: "processing",
+              status: "checking",
             },
-            data: {}
+            data: 0
           };
-          
+
           getTasks(obj)
             .then(response => {
               console.log(response);

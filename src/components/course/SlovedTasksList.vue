@@ -3,14 +3,14 @@
   <div>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>{{cardTitleList}}</span>
+        <span>已完成的任务</span>
         <!-- <el-button style="float: right; padding: 3px 0; color:#009a61" type="text">确认创建</el-button> -->
       </div>
       <div class="text item">
         <el-row>
           <el-col>
             <!-- 搜索任务 -->
-            <el-row>
+            <!-- <el-row>
               <el-col>
                 <el-input placeholder="请输入查询条件" v-model="input5" class="input-with-select">
                   <el-select v-model="select" style="width:95px;" slot="prepend" placeholder="请选择">
@@ -20,33 +20,28 @@
                   <el-button slot="append" icon="el-icon-search"></el-button>
                 </el-input>
               </el-col>
-            </el-row>
+            </el-row> -->
             <!-- 显示查询结果和建议加入的学生信息 -->
             <label class="course-group-name">任务信息</label>
             <el-row class="course-rows-table">
-              <el-col class="course-cols-table course-th" :span="3">作业ID</el-col>
-              <el-col class="course-cols-table course-th" :span="4">教师</el-col>
-              <el-col class="course-cols-table course-th" :span="8">题目</el-col>
-              <el-col class="course-cols-table course-th" :span="4">类型</el-col>
+              <el-col class="course-cols-table course-th" :span="14">题目</el-col>
+              <el-col class="course-cols-table course-th" :span="5">教师</el-col>
               <el-col class="course-cols-table course-th" :span="5">时间</el-col>
-              <!-- <el-col class="course-th" :span="3">操作</el-col> -->
             </el-row>
-            <el-row class="course-rows-table" v-if="true">
-              <el-col class="course-cols-table" :span="3">0</el-col>
-              <el-col class="course-cols-table" :span="4">朱萍</el-col>
-              <el-col class="course-cols-table" :span="8">
-                <router-link to="/course/processing/12">武汉纺织大学数学与计算机学院</router-link>
+            <el-row v-if="!tasksList.length" style="text-align:center;margin-top: 20px;">
+              暂时没有任务，去快乐的玩耍吧～
+            </el-row>
+            <el-row class="course-rows-table" v-for="task in tasksList" :key="task._id">
+              <el-col class="course-cols-table" :span="14">
+                <router-link :to="`/course/processing/${task._id}`">{{task.title}}</router-link>
               </el-col>
-              <el-col class="course-cols-table" :span="4">班级作业</el-col>
-              <el-col class="course-cols-table" :span="5">2018/5/17</el-col>
-              <!-- <el-col :span="3">
-                <el-button type="text">选择</el-button>
-              </el-col> -->
+              <el-col class="course-cols-table" :span="5">{{task.teacher.name}}</el-col>
+              <el-col class="course-cols-table" :span="5">{{task.date[0].toString().slice(0,10)}}</el-col>
             </el-row>
             <!-- 分页器 -->
             <el-row>
               <el-col style="text-align:center;margin-top:20px;">
-                <el-pagination layout="prev, pager, next" :total="50">
+                <el-pagination layout="prev, pager, next" :total="50" v-if="false">
                 </el-pagination>
               </el-col>
             </el-row>
@@ -58,41 +53,81 @@
 </template>
 <script>
   import {
+    getTasks
+  } from './../../pages/index/api/tasks/index';
+  import {
     mapState
   } from 'vuex';
   export default {
     name: "SlovedTasksList",
     data() {
       return {
-        cardTitleList: "已解决的任务",
+        tasksList: [],
       }
     },
     mounted() {
-      console.log(this.$store.state.taskMode.mode);
-      this.setListTitle()
+      this.initTasks();
     },
     computed: {
       ...mapState({
-        mode: state => state.taskMode.mode
+        user: state => state.user
       })
     },
     methods: {
-      setListTitle(){
-        console.log(this.mode);
-        switch (this.mode) {
-          case "processing":
-            this.cardTitleList = "进行中的任务";
-            break;
-          case "checking":
-            this.cardTitleList = "待查阅的任务";
-            break;
-          case "sloved":
-            this.cardTitleList = "已完成的任务";
-            break;
-          default:
-            break;
+      initTasks() {
+        if (this.user.type == 1) {
+          // 如果是学生用户
+          // 只需要查到与自己相关的状态，不需要其他学生的任务进度
+          let obj = {
+            filter: {
+              status: "sloved",
+            },
+            data: {
+              id: this.user.id
+            }
+          }
+
+          getTasks(obj)
+            .then(response => {
+              console.log(response);
+              let data = response.data;
+              if (data.success) {
+                this.tasksList = data.res;
+              } else {
+                this.$message.error('初始化页面数据失败');
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            })
+        } else if (this.user.type == 2) {
+          // 如果是教师用户
+          // 需要查到所有的学生的任务信息
+
+          // 查询条件
+          let obj = {
+            filter: {
+              teacherId: this.user.id,
+              status: "sloved",
+            },
+            data: 0
+          };
+
+          getTasks(obj)
+            .then(response => {
+              console.log(response);
+              let data = response.data;
+              if (data.success) {
+                this.tasksList = data.res;
+              } else {
+                this.$message.error('初始化页面数据失败');
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            })
         }
-      }
+      },
     }
   };
 
@@ -105,7 +140,7 @@
   .course-rows-table {
     border-bottom: 1px solid #e3e3e3;
     width: 95%;
-    text-align: center;
+    /* text-align: center; */
     margin-top: 10px;
   }
 
