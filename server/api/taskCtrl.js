@@ -147,23 +147,37 @@ module.exports = {
   async updateTaskStatus(ctx) {
     await cors();
     let data = ctx.request.body;
-    let filter = {
-      '_id': data._id,
-    };
-    let updateData = {};
-    let doc = await updateTask(filter, updateData);
-    if (doc) {
-      ctx.body = {
-        success: 1,
-        res: doc
+    const type = data.type;
+    let filter = data.filter;
+    let updateData = data.updateData;
+    // 首先根据过滤器找到该任务。
+    let docOri = await getTaskById(filter);
+    if (type == "answer") {
+      // 提交回答
+      console.log(updateData)
+      docOri.answers.push(updateData.answer);
+      docOri.status = updateData.status
+      
+      let docAfter = await updateTask(filter, {
+        answers: docOri.answers,
+        status: docOri.status
+
+      });
+      if (docAfter) {
+        ctx.body = {
+          success: 1,
+          res: docAfter
+        }
+      } else {
+        ctx.body = {
+          success: 0,
+          res: 0
+        }
       }
-      console.log("修改任务进度成功");
-    } else {
-      ctx.body = {
-        success: 0,
-        res: 0
-      }
-      console.log("修改任务进度失败");
+      
+      console.log("用户回答提交成功");
+    } else if (type == "check") {
+      // 提交查阅结果
     }
   },
   // 教师用户删除学习任务

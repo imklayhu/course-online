@@ -66,49 +66,69 @@
               <span class="select-header course-topic">{{taskInfo.date[0].toString().slice(0,10)}} ~ {{taskInfo.date[1].toString().slice(0,10)}}</span>
             </el-col>
           </el-row>
-          <!-- <el-row style="margin-top: 10px" >
-            <el-col :span="2">
-              <span class="select-header">
-                类型:
-              </span>
-            </el-col>
-            <el-col :span="22">
-              <span class="select-header course-topic">班级作业/小组作业</span>
-            </el-col>
-          </el-row> -->
         </div>
         <div class="course-menuitem" style="margin-top:10px;">
           <label class="course-group-name">编辑区</label>
-          <el-row>
-            <el-col :span="2">
-              <span class="select-header">
-                回答:
-              </span>
-            </el-col>
-            <el-col :span="22">
-              <el-input type="textarea" :rows="8" placeholder="在这里编辑答案" style="width:100%;padding-top:10px;"></el-input>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="2">
-              <span class="select-header">
-                附件:
-              </span>
-            </el-col>
-            <el-col :span="22">
-              <el-upload style="margin-top:10px;width:100%;" drag action="https://jsonplaceholder.typicode.com/posts/" multiple>
-                <i class="el-icon-upload"></i>
-                <div class="el-upload__text">上传附件，将文件拖到此处，或
-                  <em>点击上传</em>
-                </div>
-                <div class="el-upload__tip" slot="tip">支持常见的文档类型，大小不要超过10M</div>
-              </el-upload>
-            </el-col>
-          </el-row>
+          <div v-if="taskInfo.status === 'processing'">
+            <el-row>
+              <el-col :span="2">
+                <span class="select-header">
+                  回答:
+                </span>
+              </el-col>
+              <el-col :span="22">
+                <el-input v-model="answerInfo.desc" type="textarea" :rows="8" placeholder="在这里编辑答案" style="width:100%;padding-top:10px;"></el-input>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="2">
+                <span class="select-header">
+                  附件:
+                </span>
+              </el-col>
+              <el-col :span="22">
+                <el-upload style="margin-top:10px;width:100%;" drag action="https://jsonplaceholder.typicode.com/posts/" multiple>
+                  <i class="el-icon-upload"></i>
+                  <div class="el-upload__text">上传附件，将文件拖到此处，或
+                    <em>点击上传</em>
+                  </div>
+                  <div class="el-upload__tip" slot="tip">支持常见的文档类型，大小不要超过10M</div>
+                </el-upload>
+              </el-col>
+            </el-row>
+          </div>
+          <div v-if="taskInfo.status === 'checking'">
+            <el-row>
+              <el-col :span="2">
+                <span class="select-header">
+                  结果:
+                </span>
+              </el-col>
+              <el-col :span="22">
+                <el-select v-model="checkInfo.result" placeholder="请选择">
+                  <el-option label="不及格" :value="checkResult.D"></el-option>
+                  <el-option label="及格" :value="checkResult.C"></el-option>
+                  <el-option label="良好" :value="checkResult.B"></el-option>
+                  <el-option label="优秀" :value="checkResult.A"></el-option>
+                </el-select>
+                <!-- <el-input type="textarea" :rows="8" placeholder="在这里编辑答案" style="width:100%;padding-top:10px;"></el-input> -->
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="2">
+                <span class="select-header">
+                  意见:
+                </span>
+              </el-col>
+              <el-col :span="22">
+                <el-input v-model="checkInfo.desc" type="textarea" :rows="8" placeholder="在这里编辑反馈意见" style="width:100%;padding-top:10px;"></el-input>
+              </el-col>
+            </el-row>
+          </div>
           <el-row style="margin-top:20px;">
             <el-col style="text-align:center">
-              <el-button type="info">提交</el-button>
-              <el-button type="warning">取消</el-button>
+              <el-button type="info" @click="submit">提交</el-button>
+              <el-button type="warning" @click="cancel">取消</el-button>
             </el-col>
           </el-row>
         </div>
@@ -118,9 +138,13 @@
 </template>
 <script>
   import {
-    findTaskById
+    findTaskById,
+    updateTaskStatus,
   } from './../../pages/index/api/tasks/index';
 
+  import {
+    mapState
+  } from 'vuex';
   export default {
     name: "TaskDetails",
     props: {
@@ -132,11 +156,32 @@
     data() {
       return {
         taskInfo: {},
+        checkResult: {
+          A: 0,
+          B: 1,
+          C: 2,
+          D: 3
+        },
+        answerInfo: {
+          // studentInfo: this.user,
+          desc: "",
+          annexs: []
+        },
+        checkInfo: {
+          teacherInfo: this.user,
+          desc: "",
+          result: "",
+        }
       }
     },
     mounted() {
       // console.log(this.id);
       this.initData();
+    },
+    computed: {
+      ...mapState({
+        user: (state) => state.user
+      })
     },
     methods: {
       initData() {
@@ -148,13 +193,89 @@
           .then(response => {
             console.log(response);
             let data = response.data;
-            if(data.success){
+            if (data.success) {
               this.taskInfo = data.res;
             }
           })
           .catch(err => {
             console.log(err)
           })
+      },
+      // 提交回答/查阅意见
+      submit() {
+        let taskStatus = this.taskInfo.status;
+        switch (taskStatus) {
+          case "processing":
+            // 提交任务的回答
+            this.answerInfo.studentInfo = this.user;
+
+            let obj1 = {
+              filter: {
+                _id: this.id,
+              },
+              updateData: {
+                answer: this.answerInfo,
+                status: "checking"
+              },
+              type: "answer",
+            }
+
+            if (this.answerInfo.desc) {
+              updateTaskStatus(obj1)
+                .then(response => {
+                  console.log(response);
+                  if (response.data.success) {
+                    this.$notify({
+                      title: "回答成功",
+                      message: "学习任务回答成功",
+                      type: 'success'
+                    });
+                    this.$router.push({
+                      path: '/course/checking'
+                    })
+                  }
+                })
+                .catch(error => {
+                  console.log(error);
+                })
+            } else {
+              this.$message.error('答案不能为空')
+            }
+            break;
+          case "checking":
+            // 提交任务查阅结果
+            let status = "";
+            if (this.checkInfo.result == "0") {
+              status = "processing";
+            } else {
+              status = "sloved";
+            }
+            let obj2 = {
+              filter: {
+                _id: this.id,
+              },
+              updateData: {
+                check: this.checkInfo,
+                status
+              },
+              type: 'check'
+            }
+
+            updateTaskStatus(obj2)
+              .then(response => {
+                console.log(response);
+              })
+              .catch(error => {
+                console.log(error);
+              })
+            break;
+          default:
+            break;
+        }
+      },
+      // 取消编辑
+      cancel() {
+        this.$router.go(-1);
       }
     }
   };

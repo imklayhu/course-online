@@ -37,13 +37,13 @@ const taskSchema = new Schema({
         type: Object,
         required: true,
       },
-      desc: [{
+      desc: {
         type: String,
         required: true
-      }],
-      annexs: [{
-        type: Object
-      }]
+      },
+      annexs: {
+        type: Array
+      }
     },
   ],
   checks: [{
@@ -52,7 +52,7 @@ const taskSchema = new Schema({
       required: true
     },
     result: {
-      type: Boolean,
+      type: String,
       required: true
     }
   }],

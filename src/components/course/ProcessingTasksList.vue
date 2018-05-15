@@ -24,24 +24,21 @@
             <!-- 显示查询结果和建议加入的学生信息 -->
             <label class="course-group-name">任务信息</label>
             <el-row class="course-rows-table">
-              <!-- <el-col class="course-cols-table course-th" :span="3">作业ID</el-col> -->
               <el-col class="course-cols-table course-th" :span="14">题目</el-col>
               <el-col class="course-cols-table course-th" :span="5">教师</el-col>
-              <!-- <el-col class="course-cols-table course-th" :span="4">类型</el-col> -->
               <el-col class="course-cols-table course-th" :span="5">时间</el-col>
-              <!-- <el-col class="course-th" :span="3">操作</el-col> -->
             </el-row>
+
+            <el-row v-if="!tasksList.length" style="text-align:center;margin-top: 20px;">
+              暂时没有任务，去快乐的玩耍吧～
+            </el-row>
+            
             <el-row class="course-rows-table" v-for="task in tasksList" :key="task._id">
-              <!-- <el-col class="course-cols-table" :span="3">0</el-col> -->
               <el-col class="course-cols-table" :span="14">
                 <router-link :to="`/course/processing/${task._id}`">{{task.title}}</router-link>
               </el-col>
               <el-col class="course-cols-table" :span="5">{{task.teacher.name}}</el-col>
-              <!-- <el-col class="course-cols-table" :span="4">班级作业</el-col> -->
               <el-col class="course-cols-table" :span="5">{{task.date[0].toString().slice(0,10)}}</el-col>
-              <!-- <el-col :span="3">
-                <el-button type="text">选择</el-button>
-              </el-col> -->
             </el-row>
             <!-- 分页器 -->
             <el-row>
