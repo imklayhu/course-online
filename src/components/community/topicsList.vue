@@ -27,7 +27,8 @@
             <el-button size="mini" type="text">{{topic.createDate}}</el-button>
           </el-col>
           <el-col :span="3">
-            <el-button type="text" icon="el-icon-delete" size="mini" class="del">删除</el-button>
+            <el-button @click="removeTopic(topic._id)" v-if="topic.pagehost === username" type="text" icon="el-icon-delete" size="mini"
+              class="del">删除</el-button>
           </el-col>
         </el-row>
       </el-card>
@@ -46,6 +47,7 @@
   import {
     getTopicsCount,
     getTopicsRow,
+    deleteTopic,
     addLike,
     addUnlike,
   } from './../../pages/index/api/topics/index'
@@ -61,7 +63,8 @@
     },
     computed: {
       ...mapState({
-        topicsList: state => state.topics.topicsList
+        topicsList: state => state.topics.topicsList,
+        username: state => state.user.username
       })
     },
     mounted() {
@@ -154,6 +157,26 @@
         this.$router.push({
           path: `/community/${id}`
         })
+      },
+      removeTopic(id) {
+        let obj = {
+          _id: id,
+        };
+
+        deleteTopic(obj)
+          .then(response => {
+            let data = response.data;
+            if (data.success) {
+              console.log(data.res);
+              this.getTotal();
+              this.loadTopics();
+              this.$notify({
+                type: "success",
+                // message: "话题删除成功",
+                title: "话题删除成功"
+              })
+            }
+          })
       }
     }
   }

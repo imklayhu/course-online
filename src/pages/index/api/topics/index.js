@@ -33,6 +33,14 @@ export function getTopicsCount(obj){
     data: obj
   })
 }
+// 根据id获取topic详情
+export function getTopicDetail(obj){
+  return fetch({
+    url: '/api/getOneTopicById',
+    method: 'post',
+    data: obj
+  })
+}
 // 分页获取话题列表
 export function getTopicsRow(obj){
   return fetch({
@@ -61,3 +69,18 @@ export function addUnlike(obj){
 }
 
 // 评论及回复api
+export function addComment(obj){
+  return fetch({
+    url: "/api/addComment",
+    method: "post",
+    data: obj
+  })
+}
+
+export function addReply(obj){
+  return fetch({
+    url: "/api/addReply",
+    method: "post",
+    data: obj
+  })
+}

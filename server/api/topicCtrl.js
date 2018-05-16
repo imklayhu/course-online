@@ -20,8 +20,9 @@ const createTopic = (data) => {
 // 修改话题信息： 点赞点踩，评论以评论回复
 const updateTopic = (filter, data) => {
   return new Promise((reslove, reject) => {
-    // 
-    topicModel.findByIdAndUpdate(filter, data, (err, doc) => {
+    topicModel.findByIdAndUpdate(filter, data, {
+      new: true
+    }, (err, doc) => {
       if (err) {
         reject(err);
       }
@@ -29,7 +30,17 @@ const updateTopic = (filter, data) => {
     })
   })
 }
-
+// 根据_id获取topic的数据
+const findOneTopicById = (filter) => {
+  return new Promise((reslove, reject) => {
+    topicModel.findOne(filter, (err, doc) => {
+      if (err) {
+        reject(err);
+      }
+      reslove(doc);
+    })
+  })
+}
 // 根据标题内容查找topics
 const findTopicsByTitle = (filter) => {
   return new Promise((reslove, reject) => {
@@ -44,7 +55,7 @@ const findTopicsByTitle = (filter) => {
 //  获取topic的总页数
 const getTotal = (filter) => {
   return new Promise((reslove, reject) => {
-    topicModel.count(filter,  (err, total) => {
+    topicModel.count(filter, (err, total) => {
       if (err) {
         reject(err);
       }
@@ -62,7 +73,9 @@ const findTopicsByPages = (data) => {
     topicModel.find({})
       .limit(pagesize)
       .skip(page * pagesize)
-      .sort({'_id':-1})
+      .sort({
+        '_id': -1
+      })
       .exec((err, docs) => {
         if (err) {
           reject(err);
@@ -171,6 +184,23 @@ module.exports = {
       }
     }
   },
+  async getOneTopicById(ctx) {
+    await cors();
+    let filter = ctx.request.body;
+
+    let doc = await findOneTopicById(filter);
+    if (doc) {
+      ctx.body = {
+        success: 1,
+        res: doc
+      }
+    } else {
+      ctx.body = {
+        success: 0,
+        res: 0
+      }
+    }
+  },
   // 分页获取数据
   async getTopicsByPage(ctx) {
     await cors();
@@ -242,26 +272,67 @@ module.exports = {
   },
   // 添加评论
   async addComment(ctx) {
+    let data = ctx.request.body;
+    let filter = data.filter;
+    let updateData = data.updateData;
 
+    let docOri = await findOneTopicById(filter);
+    docOri.comments.push(updateData);
+    let doc = await updateTopic(filter, {
+      comments: docOri.comments,
+      commentCount: docOri.commentCount + 1
+    });
+
+    if (doc) {
+      ctx.body = {
+        success: 1,
+        res: doc
+      }
+    } else {
+      ctx.body = {
+        success: 0,
+        res: 0
+      }
+    }
   },
   // 删除评论
   async deleteComment(ctx) {
+    let data = ctx.request.body;
+    let filter = data.filter;
+    let updateData = data.updateData;
 
+    let docOri = await findOneTopicById(filter);
+
+    docOri.comments.forEach((element, index) => {
+      
+    })
   },
   // 添加评论回复
-  async addCommentReply(ctx) {
+  async addReply(ctx) {
+    let data = ctx.request.body;
+    let filter = data.filter;
+    let updateData = data.updateData;
 
+    let docOri = await findOneTopicById(filter);
+    docOri.replys.push(updateData);
+    let doc = await updateTopic(filter, {
+      replys: docOri.replys
+    });
+
+    if (doc) {
+      ctx.body = {
+        success: 1,
+        res: doc
+      }
+    } else {
+      ctx.body = {
+        success: 0,
+        res: 0
+      }
+    }
   },
   // 删除评论回复
-  async deleteCommentReply(ctx) {
-
-  },
-  // 添加回复的回复
-  async addReply2Reply(ctx) {
-
-  },
-  // 删除回复的回复
-  async deleteReply2Reply(ctx) {
+  async deleteReply(ctx) {
 
   }
 }

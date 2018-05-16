@@ -6,6 +6,7 @@ const routers = router
   .post('/deleteTopic',topicCtrl.deleteTopic)
   .post('/reeditTopic',topicCtrl.reeditTopic)
   .post('/getTopicsCount',topicCtrl.getTopicsCount)
+  .post('/getOneTopicById',topicCtrl.getOneTopicById)
   .post('/getTopicsByPage',topicCtrl.getTopicsByPage)
   // 点赞/踩
   .post('/addLike',topicCtrl.addLike)
@@ -13,9 +14,7 @@ const routers = router
   // 评论和评论回复，回复->回复
   .post('/addComment',topicCtrl.addComment)
   .post('/deleteComment',topicCtrl.deleteComment)
-  .post('/addCommentReply',topicCtrl.addCommentReply)
-  .post('/deleteCommentReply',topicCtrl.deleteCommentReply)
-  .post('/addReply2Reply',topicCtrl.addReply2Reply)
-  .post('/deleteReply2Reply',topicCtrl.deleteReply2Reply)
-
+  .post('/addReply',topicCtrl.addReply)
+  .post('/deleteReply',topicCtrl.deleteReply)
+  
 module.exports = routers;

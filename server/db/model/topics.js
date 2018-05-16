@@ -35,7 +35,7 @@ const topicSchema = new Schema({
       type: String,
       required: true
     },
-    conetnt: {
+    content: {
       type: String,
       required: true
     },
@@ -45,10 +45,19 @@ const topicSchema = new Schema({
     }
   }],
   commentCount: {
-    type: String,
+    type: Number,
     default: 0
   },
-  commentReplys: [{
+  replys: [{
+    replyType: {
+      type: Number,
+      required: true,
+      default: 0
+    },
+    content: {
+      type: String,
+      required: true
+    },
     username: {
       type: String,
       required: true
@@ -57,25 +66,11 @@ const topicSchema = new Schema({
       type: String,
       required: true,
     },
-    commentUsername: {
-      type: String,
-      required: true
-    },
-    date: {
-      type: String,
-      required: true
-    }
-  }],
-  replyReplys: [{
-    username: {
-      type: String,
-      required: true
-    },
     replyId: {
       type: String,
-      required: true,
+      required: true
     },
-    replyUsername: {
+    atUsername: {
       type: String,
       required: true
     },
