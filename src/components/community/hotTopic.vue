@@ -18,6 +18,11 @@
 <script>
   export default {
     name: "createTopic",
+    data(){
+      return {
+        input5: '',
+      }
+    }
   }
 
 </script>

@@ -18,15 +18,17 @@ const topicSchema = new Schema({
     type: String,
     required: true
   },
-  owner: {
-    type: Object,
+  pagehost: {
+    type: String,
     required: true
   },
   like: {
     type: Number,
+    default: 0
   },
   unlike: {
     type: Number,
+    default: 0
   },
   comments: [{
     username: {
@@ -42,6 +44,10 @@ const topicSchema = new Schema({
       required: true
     }
   }],
+  commentCount: {
+    type: String,
+    default: 0
+  },
   commentReplys: [{
     username: {
       type: String,

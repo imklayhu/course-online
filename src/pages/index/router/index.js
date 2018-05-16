@@ -114,7 +114,8 @@ export default new Router({
         {
           path: '/community/:id',
           name: 'detail',
-          component: topicDetail
+          component: topicDetail,
+          props: true
         }
       ]
     },

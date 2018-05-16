@@ -5,16 +5,22 @@
       <el-row style="margin:10px 5px 0 5px;">
         <el-col :span="2">标题:</el-col>
         <el-col :span="22">
-          <el-input placeholder="输入标题..."></el-input>
+          <el-input v-model="topicInfo.title" placeholder="输入标题..."></el-input>
         </el-col>
       </el-row>
       <el-row style="margin:10px 5px 0 5px;">
-        <el-col :span="2">描述:</el-col>
+        <el-col :span="2">主题:</el-col>
         <el-col :span="22">
-          <el-input type="textarea" :rows="3" placeholder="输入描述..."></el-input>
+          <el-input v-model="topicInfo.theme" placeholder="输入主题，如：毕业设计"></el-input>
         </el-col>
       </el-row>
-      <el-row style="margin:10px 5px 0 5px;padding-bottom: 10px;">
+      <el-row style="margin:10px 5px 10px 5px;">
+        <el-col :span="2">描述:</el-col>
+        <el-col :span="22">
+          <el-input v-model="topicInfo.desc" type="textarea" :rows="3" placeholder="输入描述..."></el-input>
+        </el-col>
+      </el-row>
+      <el-row style="margin:10px 5px 0 5px;padding-bottom: 10px;" v-if="false">
         <el-col :span="2">图片:</el-col>
         <el-col :span="22">
           <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove"
@@ -26,14 +32,99 @@
       </el-row>
     </div>
     <div style="text-align:right;margin-top:10px;">
-      <el-button size="small" type="primary">确认</el-button>
+      <el-button @click="submit" size="small" type="primary">确认</el-button>
       <el-button size="small">取消</el-button>
     </div>
   </div>
 </template>
 <script>
+  import {
+    createTopic,
+    getTopicsRow
+  } from './../../pages/index/api/topics/index';
+  import {
+    mapState
+  } from 'vuex';
+
   export default {
     name: "createTopic",
+    data() {
+      return {
+        topicInfo: {
+          theme: '',
+          title: '',
+          desc: '',
+          pagehost: '',
+          createDate: ''
+        }
+      }
+    },
+    computed: {
+      ...mapState({
+        username: state => state.user.username
+      })
+    },
+    methods: {
+      submit() {
+        let obj = this.topicInfo;
+        obj.pagehost = this.username;
+        Date.prototype.Format = function (fmt) { //author: meizz 
+          var o = {
+            "M+": this.getMonth() + 1, //月份 
+            "d+": this.getDate(), //日 
+            "h+": this.getHours(), //小时 
+            "m+": this.getMinutes(), //分 
+            "s+": this.getSeconds(), //秒 
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+            "S": this.getMilliseconds() //毫秒 
+          };
+          if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+          for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) :
+              (("00" + o[k]).substr(("" + o[k]).length)));
+          return fmt;
+        };
+
+        obj.createDate = new Date().Format('yyyy-MM-dd');
+        if (obj.title && obj.desc) {
+          createTopic(obj)
+            .then(response => {
+              if (response.data.success) {
+                this.$notify({
+                  title: '话题新建成功',
+                  message: '新的话题创建成功',
+                  type: 'success'
+                })
+                const obj1 = {
+                  page: 1
+                };
+                getTopicsRow(obj1)
+                  .then(response => {
+                    let data = response.data;
+                    if (data.success) {
+                      this.$store.dispatch('SetTopicsList', data.res);
+                    }
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  })
+                this.topicInfo = {
+                  theme: '',
+                  title: '',
+                  desc: '',
+                  pagehost: '',
+                  createDate: ''
+                }
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            })
+        } else {
+          this.$message.warning('检查必填项');
+        }
+      },
+    }
   }
 
 </script>
