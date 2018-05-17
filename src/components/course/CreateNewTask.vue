@@ -27,8 +27,8 @@
             <el-input v-model="taskData.desc" type="textarea" :rows="4" placeholder="任务描述" style="width:95%;"></el-input>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :span="2">
+        <el-row v-if="false">
+          <el-col :span="2" >
             <span class="select-header">
               附件
             </span>

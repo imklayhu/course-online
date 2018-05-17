@@ -8,10 +8,10 @@
     </div>
     <label style="font-size:16px; color: #009a61;border-bottom: 1px solid #cccccc;display: block;">热门话题</label>
     <div class="hot-topic">
-      <span>就是测试一下主题</span>
-      <span>就是测试一下主题</span>
-      <span>就是测试一下主题</span>
-      <span>就是测试一下主题就是测试一下主题就是测试一下主题</span>
+      <span>关于js promise队列的疑问</span>
+      <span>ES6变量的解构赋值</span>
+      <span>vue-cli的项目结构</span>
+      <span>跨域，了解一下</span>
     </div>
   </div>
 </template>

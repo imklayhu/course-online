@@ -3,7 +3,7 @@
   <div>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>进行中的任务</span>
+        <span>学习任务详情</span>
         <!-- <el-button style="float: right; padding: 3px 0; color:#009a61" type="text">修改进度</el-button> -->
       </div>
       <div class="text item">
@@ -145,7 +145,7 @@
                 <el-input v-model="answerInfo.desc" type="textarea" :rows="8" placeholder="在这里编辑答案" style="width:100%;padding-top:10px;"></el-input>
               </el-col>
             </el-row>
-            <el-row>
+            <el-row v-if="false">
               <el-col :span="2">
                 <span class="select-header">
                   附件:

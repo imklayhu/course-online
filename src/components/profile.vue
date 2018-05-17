@@ -166,7 +166,7 @@
               </div>
             </el-card>
           </el-tab-pane>
-          <el-tab-pane label="角色管理">角色管理</el-tab-pane>
+          <!-- <el-tab-pane label="角色管理">角色管理</el-tab-pane> -->
           <el-tab-pane label="退出系统">
             <!-- 退出系统 -->
             <el-card class="logout-card secure-setting-panel">
